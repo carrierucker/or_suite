@@ -167,7 +167,7 @@ class AmbulanceEnvironment(gym.Env):
 
         assert self.observation_space.contains(self.state)
 
-        return self.state, reward,  done, info
+        return self.state, reward, done, info
 
 
   def reset_current_step(self, text, line_x1, line_x2, line_y):
@@ -185,8 +185,8 @@ class AmbulanceEnvironment(gym.Env):
 
   def render(self, mode='human'):
       # Renders the environment using a pyglet window
-      screen_width = 800
-      screen_height = 550
+      screen_width = 600
+      screen_height = 400
       line_x1 = 50
       line_x2 = 550
       line_y = 300
