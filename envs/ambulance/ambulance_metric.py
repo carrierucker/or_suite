@@ -179,8 +179,8 @@ class AmbulanceEnvironment(gym.Env):
 
   def draw_ambulances(self, locations, line_x1, line_x2, line_y, ambulance):
       for loc in locations:
-            self.viewer.image(line_x1 + (line_x2 - line_x1) * loc, line_y, ambulance, 0.15)
-            # self.viewer.circle(line_x1 + (line_x2 - line_x1) * loc, line_y, radius=5, color=rendering.RED)
+            # self.viewer.image(line_x1 + (line_x2 - line_x1) * loc, line_y, ambulance, 0.15)
+            self.viewer.circle(line_x1 + (line_x2 - line_x1) * loc, line_y, radius=5, color=rendering.RED)
 
 
   def render(self, mode='human'):
@@ -191,8 +191,10 @@ class AmbulanceEnvironment(gym.Env):
       line_x2 = 550
       line_y = 300
 
-      ambulance = pyglet.image.load('images/ambulance.jpg')
-      call = pyglet.image.load('images/call.jpg')
+    #   ambulance = pyglet.image.load('images/ambulance.jpg')
+    #   call = pyglet.image.load('images/call.jpg')
+      ambulance = None
+      call = None
 
       if self.viewer is None:
           self.viewer = rendering.PygletWindow(screen_width + 50, screen_height + 50)
