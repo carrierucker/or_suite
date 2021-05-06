@@ -185,8 +185,8 @@ class AmbulanceEnvironment(gym.Env):
 
   def render(self, mode='human'):
       # Renders the environment using a pyglet window
-      screen_width = 600
-      screen_height = 400
+      screen_width = 800
+      screen_height = 550
       line_x1 = 50
       line_x2 = 550
       line_y = 300
