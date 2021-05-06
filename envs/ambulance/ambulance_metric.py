@@ -204,7 +204,7 @@ class AmbulanceEnvironment(gym.Env):
 
           self.reset_current_step("Action chosen", line_x1, line_x2, line_y)
           self.draw_ambulances(self.most_recent_action, line_x1, line_x2, line_y, ambulance)
-          self.viewer.update()
+          screen1 = self.viewer.render(mode)
           time.sleep(2)
 
 
@@ -214,7 +214,7 @@ class AmbulanceEnvironment(gym.Env):
           arrival_loc = self.state[np.argmax(np.abs(self.state - self.most_recent_action))]
         #   self.viewer.image(line_x1 + (line_x2 - line_x1) * arrival_loc, line_y, call, 0.05)
           self.viewer.circle(line_x1 + (line_x2 - line_x1) * arrival_loc, line_y, radius=5, color=rendering.GREEN)
-          self.viewer.update()
+          screen2 = self.viewer.render(mode)
           time.sleep(2)
 
 
@@ -222,8 +222,10 @@ class AmbulanceEnvironment(gym.Env):
 
       self.draw_ambulances(self.state, line_x1, line_x2, line_y, ambulance)
 
-      self.viewer.update()
+      screen3 = self.viewer.render(mode)
       time.sleep(2)
+
+      return (screen1, screen2, screen3)
 
 
   def close(self):
