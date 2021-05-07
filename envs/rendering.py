@@ -101,18 +101,18 @@ class PygletWindow:
         self.window.close()
 
 
-if __name__ == '__main__':
-    pg = PygletWindow(400, 400)
+# if __name__ == '__main__':
+#     pg = PygletWindow(400, 400)
 
-    pg.reset()
-    pg.circle(5, 5, 100, 1, 5)
-    pg.text("Test", 10, 10)
-    pg.text("Test2", 30, 30)
-    pg.update()
-    input()
+#     pg.reset()
+#     pg.circle(5, 5, 100, 1, 5)
+#     pg.text("Test", 10, 10)
+#     pg.text("Test2", 30, 30)
+#     pg.update()
+#     input()
 
-    pg.circle(5, 5, 100, 1, 5)
-    pg.text("Test3333", 10, 10)
-    pg.text("Test2123123", 303, 30)
-    pg.update()
-    input()
+#     pg.circle(5, 5, 100, 1, 5)
+#     pg.text("Test3333", 10, 10)
+#     pg.text("Test2123123", 303, 30)
+#     pg.update()
+#     input()
