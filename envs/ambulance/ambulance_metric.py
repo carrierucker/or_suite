@@ -67,6 +67,7 @@ class AmbulanceEnvironment(gym.Env):
             alpha: (float) parameter controlling proportional difference in cost to move between calls and to respond to a call
             starting_state: (float list) a list containing the starting locations for each ambulance
             num_ambulance: (int) the number of ambulances in the environment 
+            norm: (int) the norm used in the calculations
         '''
         super(AmbulanceEnvironment, self).__init__()
 
@@ -78,6 +79,7 @@ class AmbulanceEnvironment(gym.Env):
         self.timestep = 0
         self.num_ambulance = config['num_ambulance']
         self.arrival_dist = config['arrival_dist']
+        self.norm = config['norm']
 
         # variables used for rendering code
         self.viewer = None
@@ -150,7 +152,7 @@ class AmbulanceEnvironment(gym.Env):
 
         # print("alpha", self.alpha)
 
-        reward = -1 * (self.alpha * np.sum(np.abs(old_state - action)) + (1 - self.alpha) * np.sum(np.abs(action - new_state)))
+        reward = -1 * ((self.alpha / (self.num_ambulance**(1 / self.norm))) * np.linalg.norm(action-self.state, self.norm) + (1 - self.alpha) * np.linalg.norm(action-new_state, self.norm))
         
         
         # The info dictionary is used to pass the location of the most recent arrival
@@ -167,7 +169,7 @@ class AmbulanceEnvironment(gym.Env):
 
         assert self.observation_space.contains(self.state)
 
-        return self.state, reward, done, info
+        return self.state, reward,  done, info
 
 
   def reset_current_step(self, text, line_x1, line_x2, line_y):
@@ -179,8 +181,8 @@ class AmbulanceEnvironment(gym.Env):
 
   def draw_ambulances(self, locations, line_x1, line_x2, line_y, ambulance):
       for loc in locations:
-            # self.viewer.image(line_x1 + (line_x2 - line_x1) * loc, line_y, ambulance, 0.15)
-            self.viewer.circle(line_x1 + (line_x2 - line_x1) * loc, line_y, radius=5, color=rendering.RED)
+            self.viewer.image(line_x1 + (line_x2 - line_x1) * loc, line_y, ambulance, 0.02)
+            # self.viewer.circle(line_x1 + (line_x2 - line_x1) * loc, line_y, radius=5, color=rendering.RED)
 
 
   def render(self, mode='human'):
@@ -190,11 +192,11 @@ class AmbulanceEnvironment(gym.Env):
       line_x1 = 50
       line_x2 = screen_width - line_x1
       line_y = 300
+      script_dir = os.path.dirname(__file__)
+      ambulance = pyglet.image.load(script_dir + '/images/ambulance.jpg')
+      call = pyglet.image.load(script_dir +  '/images/call.jpg')
 
-    #   ambulance = pyglet.image.load('images/ambulance.jpg')
-    #   call = pyglet.image.load('images/call.jpg')
-      ambulance = None
-      call = None
+      screen1, screen2, screen3 = None, None, None
 
       if self.viewer is None:
           self.viewer = rendering.PygletWindow(screen_width + 50, screen_height + 50)
@@ -212,8 +214,8 @@ class AmbulanceEnvironment(gym.Env):
           self.draw_ambulances(self.most_recent_action, line_x1, line_x2, line_y, ambulance)
           
           arrival_loc = self.state[np.argmax(np.abs(self.state - self.most_recent_action))]
-        #   self.viewer.image(line_x1 + (line_x2 - line_x1) * arrival_loc, line_y, call, 0.05)
-          self.viewer.circle(line_x1 + (line_x2 - line_x1) * arrival_loc, line_y, radius=5, color=rendering.GREEN)
+          self.viewer.image(line_x1 + (line_x2 - line_x1) * arrival_loc, line_y, call, 0.02)
+        #   self.viewer.circle(line_x1 + (line_x2 - line_x1) * arrival_loc, line_y, radius=5, color=rendering.GREEN)
           screen2 = self.viewer.render(mode)
           time.sleep(2)
 
@@ -233,4 +235,3 @@ class AmbulanceEnvironment(gym.Env):
     if self.viewer:
         self.viewer.close()
         self.viewer = None
-
